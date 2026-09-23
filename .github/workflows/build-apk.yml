@@ -23,6 +23,8 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: true
 
       - name: Install Android SDK
         run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
@@ -39,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: boom-crash-detector
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/*.apk
