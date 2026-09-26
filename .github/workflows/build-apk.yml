@@ -22,9 +22,7 @@ jobs:
           cache: gradle
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v4
-        with:
-          accept-android-sdk-licenses: false
+        uses: android-actions/setup-android@v3
 
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses
@@ -37,11 +35,11 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build Debug APK
-        run: gradle assembleDebug --no-daemon
+      - name: Build Release APK
+        run: gradle assembleRelease --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: boom-crash-detector
-          path: app/build/outputs/apk/debug/*.apk
+          name: boom-crash-detector-release
+          path: app/build/outputs/apk/release/app-release.apk8
