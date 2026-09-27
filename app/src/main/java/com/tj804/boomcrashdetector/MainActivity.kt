@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         val input = EditText(this)
         input.hint = "Enter multiplier e.g. 2.50"
-        input.inputType = 2
+        input.inputType = 8194
         input.setTextColor(Color.WHITE)
         input.setHintTextColor(Color.GRAY)
 
