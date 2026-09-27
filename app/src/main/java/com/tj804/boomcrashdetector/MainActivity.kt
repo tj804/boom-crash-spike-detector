@@ -21,43 +21,44 @@ class MainActivity : AppCompatActivity() {
         layout.setPadding(30, 30, 30, 30)
 
         val title = TextView(this)
-        title.text = "Boom & Crash Spike Detector"
+        title.text = "Boom 500 Spike Detector"
         title.textSize = 26f
         title.gravity = Gravity.CENTER
         title.setTextColor(Color.WHITE)
 
         val input = EditText(this)
-        input.hint = "Enter multiplier e.g. 2.50"
+        input.hint = "Enter Boom 500 price e.g. 5304.345"
         input.inputType = 8194
         input.setTextColor(Color.WHITE)
         input.setHintTextColor(Color.GRAY)
 
         val analyzeButton = Button(this)
-        analyzeButton.text = "ANALYZE"
+        analyzeButton.text = "ANALYZE PRICE"
 
         val resetButton = Button(this)
         resetButton.text = "CLEAR / RESET"
 
         val status = TextView(this)
-        status.text = "Enter a multiplier"
+        status.text = "Enter a Boom 500 price"
         status.textSize = 22f
         status.gravity = Gravity.CENTER
         status.setPadding(10, 20, 10, 20)
+        status.setTextColor(Color.WHITE)
 
         val countText = TextView(this)
-        countText.text = "Results collected: 0 / 20"
+        countText.text = "Prices collected: 0 / 20"
         countText.textSize = 16f
         countText.gravity = Gravity.CENTER
         countText.setTextColor(Color.LTGRAY)
 
         val averageText = TextView(this)
-        averageText.text = "Average: --"
+        averageText.text = "Average price: --"
         averageText.textSize = 18f
         averageText.gravity = Gravity.CENTER
         averageText.setTextColor(Color.LTGRAY)
 
         val historyText = TextView(this)
-        historyText.text = "Recent results:\n--"
+        historyText.text = "Recent prices:\n--"
         historyText.textSize = 17f
         historyText.setPadding(10, 20, 10, 20)
         historyText.setTextColor(Color.WHITE)
@@ -78,25 +79,29 @@ class MainActivity : AppCompatActivity() {
             val value = input.text.toString().trim().toDoubleOrNull()
 
             if (value == null || value <= 0) {
-                status.text = "⚠️ Enter a valid multiplier"
+                status.text = "⚠️ Enter a valid Boom 500 price"
                 status.setTextColor(Color.YELLOW)
                 return@setOnClickListener
             }
 
-            val result = detector.addMultiplier(value)
+            val result = detector.addPrice(value)
 
             status.text = result
 
             when {
-                result.contains("STRONG SPIKE") -> {
+                result.contains("STRONG UPWARD SPIKE") -> {
                     status.setTextColor(Color.RED)
                 }
 
-                result.contains("Possible Spike") -> {
+                result.contains("SPIKE CONDITIONS") -> {
                     status.setTextColor(Color.YELLOW)
                 }
 
-                result.contains("Strong Drop") -> {
+                result.contains("UPWARD MOVEMENT") -> {
+                    status.setTextColor(Color.rgb(255, 165, 0))
+                }
+
+                result.contains("STRONG DOWNWARD") -> {
                     status.setTextColor(Color.BLUE)
                 }
 
@@ -107,14 +112,19 @@ class MainActivity : AppCompatActivity() {
 
             val history = detector.getHistory()
 
-            countText.text = "Results collected: ${history.size} / 20"
+            countText.text = "Prices collected: ${history.size} / 20"
 
             if (history.isNotEmpty()) {
                 val average = history.average()
-                averageText.text = "Average: %.2f".format(average)
+                averageText.text =
+                    "Average price: %.3f".format(average)
 
-                val recent = history.takeLast(10).joinToString("  ")
-                historyText.text = "Recent results:\n$recent"
+                val recent = history.takeLast(10)
+                    .joinToString("\n") {
+                        "%.3f".format(it)
+                    }
+
+                historyText.text = "Recent prices:\n$recent"
             }
         }
 
@@ -124,12 +134,12 @@ class MainActivity : AppCompatActivity() {
 
             input.text.clear()
 
-            status.text = "Enter a multiplier"
+            status.text = "Enter a Boom 500 price"
             status.setTextColor(Color.WHITE)
 
-            countText.text = "Results collected: 0 / 20"
-            averageText.text = "Average: --"
-            historyText.text = "Recent results:\n--"
+            countText.text = "Prices collected: 0 / 20"
+            averageText.text = "Average price: --"
+            historyText.text = "Recent prices:\n--"
         }
     }
 }
